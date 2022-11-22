@@ -7,18 +7,17 @@ import java.io.BufferedReader;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.*;
-import java.util.stream.Collectors;
-
-public class Operation {
+import java.util.stream.Collectors;public class Operations {
+    //Creating array List
     static ArrayList<Contacts> contactsDetails = new ArrayList();
+    //Taking Scanner Class Object
     static Scanner sc = new Scanner(System.in);
     static File file = new File("C:\\Users\\User\\Desktop\\210_RPF\\AddressBookCSVJSON\\src\\main\\resources\\AddressBookFile.txt");
     static File csvFile = new File("C:\\Users\\User\\Desktop\\210_RPF\\AddressBookCSVJSON\\src\\main\\resources\\AddressBook.csv");
     static HashMap<String, ArrayList<Contacts>> hashmap = new HashMap<>();
-    private static com.brideglabz.addressbokkcsvjson.Operation Operation;
 
     //    method For Adding Multiple Address Book
-    public static void AddressBook(Operation operations) throws IOException {
+    public static void AddressBook(Operations operations) throws IOException {
         int select = 0;
         do {
             System.out.println("1)Add Address Book \n2)Search \n3)Display Address book \n4)countPersonFromSame_City_State \n5)Sorted Contacts \n6)sortContactsByZipOrCityOrState \n7)Read From File \n8)Add To Address Book File" +
@@ -35,7 +34,7 @@ public class Operation {
                             break;
                         } else {
                             ArrayList<Contacts> contactDetails1 = new ArrayList<>();
-                            operations.menuChoose(Operation, contactDetails1);
+                            operations.menuChoose(operations, contactDetails1);
                             hashmap.put(AddressBookName, contactDetails1);
                         }
                         System.out.println("AddressBook Added" + hashmap + " ");
@@ -75,10 +74,9 @@ public class Operation {
                     writeCSVFile();
                     break;
                 default:
-            }
-            System.out.println("if you do not want to create multiple address book press 1.");
+            }System.out.println("if you do not want to create multiple address book press 1.");
             select = sc.nextInt();
-        } while (select == 1);
+        }while (select == 1);
     }
 
     private static List<Contacts> SearchInMultipleBook(String name) {
@@ -98,13 +96,13 @@ public class Operation {
         System.out.printf("No record found:");
         return null;
     }
-
-    public void SearchInSingleBook(ArrayList<Contacts> contactsDetails) {
+    public void SearchInSingleBook(ArrayList<Contacts> contactdetails){
         System.out.println("Enter name of city or state to search");
-        String name = sc.next();
-        ArrayList<Contacts> contacts = new ArrayList<>();
-        for (Contacts contact : contactsDetails) {
-            if (contact.getCity().equals(name) || contact.getState().equals(name)) {
+        String name=sc.next();
+        ArrayList<Contacts> contacts=new ArrayList<>();
+        for (Contacts contact:contactdetails){
+            if(contact.getCity().equals(name)||contact.getState().equals(name))
+            {
                 contacts.add(contact);
             }
             System.out.println(contact);
@@ -112,31 +110,29 @@ public class Operation {
     }
     //Counting how many persons belonging from same city or state
 
-    public static List<Contacts> countFromSame_City_State(String name) {
-        int count = 0;
-        for (Map.Entry<String, ArrayList<Contacts>> entry : hashmap.entrySet()) {
-            for (Contacts v : entry.getValue()) {
-                if (v.getCity().equals(name) || v.getState().equals(name)) {
+    public static List<Contacts> countFromSame_City_State(String name){
+        int count=0;
+        for (Map.Entry<String, ArrayList<Contacts>> entry : hashmap.entrySet()){
+            for (Contacts v:entry.getValue()){
+                if (v.getCity().equals(name)|| v.getState().equals(name)){
                     count++;
                 }
             }
         }
-        System.out.printf(count + "\t\nPersons belonging From =>" + name + " \n");
+        System.out.printf(count+"\t\nPersons belonging From =>"+name+ " \n");
         return null;
     }
-
     public static void sortContact(HashMap<String, ArrayList<Contacts>> multipleAddressBook) {
-        for (Map.Entry<String, ArrayList<Contacts>> personSorted : multipleAddressBook.entrySet()) {
+        for(Map.Entry<String,ArrayList<Contacts>> personSorted : multipleAddressBook.entrySet()){
             List<Contacts> sortedContacts;
             sortedContacts = personSorted.getValue().stream().sorted(Comparator.comparing(contacts -> contacts.getFirstName() + contacts.getLastName())).collect(Collectors.toList());
             System.out.println("Sorted Contacts By Name : ");
-            for (Contacts item : sortedContacts) {
+            for (Contacts item : sortedContacts){
                 System.out.println(item.toString());
             }
         }
     }
-
-    public static void sortContactsByZipOrCityOrState(HashMap<String, ArrayList<Contacts>> hashmap) {
+    public static void sortContactsByZipOrCityOrState(HashMap<String, ArrayList<Contacts>> hashmap){
         for (Map.Entry<String, ArrayList<Contacts>> addressBookMapEntry : hashmap.entrySet()) {
             List<Contacts> sortedContacts = addressBookMapEntry.getValue().stream().sorted(Comparator.comparing(contactInfo -> contactInfo.getZip() + contactInfo.getCity() + contactInfo.getState())).collect(Collectors.toList());
             System.out.println("Sorted Contacts By Zip : ");
@@ -146,7 +142,6 @@ public class Operation {
             }
         }
     }
-
     /*
        Create addDetails method
        create info contact Class object
@@ -194,7 +189,7 @@ public class Operation {
 
                 if (contacts.getFirstName().equals(firstName)) {
                     System.out.println("Your Name is already present ");
-                    Operation.addDetails(contactsDetails);
+                    Operations.addDetails(contactsDetails);
                 }
                 System.out.println("Re-enter first name");
                 info.setFirstName(firstName);
@@ -218,14 +213,12 @@ public class Operation {
         }
         return contactsDetails;
     }
-
     public void displayContacts(ArrayList<Contacts> contactsDetails) {
-        for (Contacts contactsDetailsValue : Operation.contactsDetails) {
+        for (Contacts contactsDetailsValue : Operations.contactsDetails) {
             System.out.println(contactsDetailsValue);
             System.out.println("---------------------------");
         }
     }
-
     public static void displayAddressBook() {
         for (Map.Entry<String, ArrayList<Contacts>> entry : hashmap.entrySet())
             for (Contacts v : entry.getValue()) {
@@ -233,19 +226,17 @@ public class Operation {
                 System.out.println("FirstName \t LastName \t Email \t Contact Number \t Address \t City \t State \t Zip Code ");
                 System.out.println(v.getFirstName() + "\t" + v.getLastName() + "\t" + v.getEmail() + "\t" + v.getContactNo() + "\t" + v.getAddress() +
                         "\t" + v.getCity() + "\t" + v.getState() + "\t" + v.getZip());
-
             }
     }
-
     /*
         Another method is to create editDetails
-        Edit details you want to edit in the respective information by using switch case
+        Edit details you want to editing in the respective information by using switch case
      */
     public void editDetails(ArrayList<Contacts> contactsDetails1) {
         System.out.println("Enter the first name you want to edit ");
         String searchFirstName = sc.next();
         // taking for each loop
-        for (Contacts contact : Operation.contactsDetails) {
+        for (Contacts contact : Operations.contactsDetails) {
             // taking name variable and store the first name that you want to edit
             String name = contact.getFirstName();
             // checking if condition your input first name is equal to search first name or not by equals function
@@ -305,12 +296,11 @@ public class Operation {
 
         }
     }
-
     public void deleteContact(ArrayList<Contacts> contactsDetails) {
         System.out.println("Enter First Name for which you want to delete contact: ");
         String firstname = sc.next();
 
-        Iterator<Contacts> removeContact = Operation.contactsDetails.iterator();
+        Iterator<Contacts> removeContact = Operations.contactsDetails.iterator();
         /*  Checking the next element where
          *   condition holds true till there is single element
          *   in the List using hasNext() method
@@ -327,8 +317,7 @@ public class Operation {
             }
         }
     }
-
-    public static void menuChoose(Operation operations, ArrayList<Contacts> contactsDetails) {
+    public static void menuChoose(Operations operations, ArrayList<Contacts> contactsDetails) {
         Scanner sc = new Scanner(System.in);
 
         int chooseNumber;
@@ -371,19 +360,17 @@ public class Operation {
             }
         } while (chooseNumber != 6);
     }
-
     //Adding records in AddressBookFile
-    public static void addToAddressBookFile() {
+    public static void addToAddressBookFile(){
         try {
             FileWriter fileWriter = new FileWriter(file);
-            fileWriter.write(String.valueOf(Operation.hashmap));
+            fileWriter.write(String.valueOf(Operations.hashmap));
             fileWriter.close();
 
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
     }
-
     // Reading Records from AddressBookFile
     public static void readFromFile() {
         try {
@@ -396,37 +383,16 @@ public class Operation {
             throw new RuntimeException(ex);
         }
     }
-
-    public static void writeCSVFile() {
+    public static void writeCSVFile(){
         try {
             FileWriter fileWriterCSV = new FileWriter(csvFile);
-            fileWriterCSV.write(String.valueOf(Operation.hashmap));
+            fileWriterCSV.write(String.valueOf(Operations.hashmap));
             fileWriterCSV.close();
-        } catch (IOException e) {
+        }catch (IOException e){
             throw new RuntimeException(e);
         }
     }
-
-    public static <CSVReader, CsvValidationException extends Throwable> void readFromCSVFile() {
-/*        try (BufferedReader br = Files.newBufferedReader(Paths.get("C:\Users\User\Desktop\210_RPF\AddressBookCSVJSON\src\main\resources\\AddressBook.csv"))){
-            // CSV file delimiter
-            String DELIMITER = ",";
-
-           // read the file line by line
-            String line;
-           while ((line = br.readLine()) != null)
-           //returns a Boolean value         {         String[] contact = line.split(DELIMITER);
-               //use comma as separator
-               System.out.println("Contact[First Name=" + contact[1] + ", Last Name=" + contact[2] + ", Address=" + contact[3]+ ", City= " + contact[4] + ", State= " + contact[5]+
-                       "Pin Code=" + contact[6] + ", Phone Number=" + contact[7] + ", Email Address=" + contact[8] + "]");
-                System.out.println("Contacts["+ String.join(", ", contact) +"]");     }
-       } catch (IOException e) {
-           throw new RuntimeException(e);
-       }
-   }
-   
- */
-
+    public static void readFromCSVFile() {
         try (Reader reader = Files.newBufferedReader(Paths.get(String.valueOf(csvFile)));
              CSVReader csvReader = new CSVReader(reader)) {
             String[] nextRecord;
